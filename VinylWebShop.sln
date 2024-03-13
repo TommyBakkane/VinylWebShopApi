@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylWebShop", "VinylWebShop\VinylWebShop.csproj", "{583B41C9-EA81-43C1-B100-0162E04A1A6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylWebShop.Tests", "VinylWebShop.Tests\VinylWebShop.Tests.csproj", "{F3E32B5B-FFFC-4EB2-AB59-204F58E86057}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{583B41C9-EA81-43C1-B100-0162E04A1A6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{583B41C9-EA81-43C1-B100-0162E04A1A6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{583B41C9-EA81-43C1-B100-0162E04A1A6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{583B41C9-EA81-43C1-B100-0162E04A1A6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3E32B5B-FFFC-4EB2-AB59-204F58E86057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3E32B5B-FFFC-4EB2-AB59-204F58E86057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3E32B5B-FFFC-4EB2-AB59-204F58E86057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3E32B5B-FFFC-4EB2-AB59-204F58E86057}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8966663D-5DEA-4EB8-977C-9B1013595FC2}
+	EndGlobalSection
+EndGlobal
