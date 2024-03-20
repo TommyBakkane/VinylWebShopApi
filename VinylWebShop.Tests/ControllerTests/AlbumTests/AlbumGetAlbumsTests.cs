@@ -1,10 +1,9 @@
-﻿using Castle.Core.Logging;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using VinylWebShop.Context;
 using VinylWebShop.Controllers;
-using VinylWebShop.Facades;
+using VinylWebShop.Services;
 
 namespace VinylWebShop.Tests.ControllerTests.AlbumTests
 {
@@ -19,7 +18,7 @@ namespace VinylWebShop.Tests.ControllerTests.AlbumTests
         new Album { Id = 2, Title = "Album 2", Artist = "Artist 2", Description = "Description 2", Image = "Image 2"},
     };
 
-            var albumFacadeMock = new Mock<IAlbumFacade>();
+            var albumFacadeMock = new Mock<IAlbumService>();
             albumFacadeMock.Setup(x => x.GetAlbums()).ReturnsAsync(expectedAlbums);
 
             var loggerMock = new Mock<ILogger<AlbumController>>();
@@ -39,7 +38,7 @@ namespace VinylWebShop.Tests.ControllerTests.AlbumTests
         [Fact]
         public async Task GetAlbums_ReturnsBadRequestResultOnError()
         {
-            var albumFacadeMock = new Mock<IAlbumFacade>();
+            var albumFacadeMock = new Mock<IAlbumService>();
             albumFacadeMock.Setup(x => x.GetAlbums()).ThrowsAsync(new Exception("Test exception"));
             var loggerMock = new Mock<ILogger<AlbumController>>();
             var controller = new AlbumController(albumFacadeMock.Object, loggerMock.Object);

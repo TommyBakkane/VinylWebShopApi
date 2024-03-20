@@ -1,47 +1,38 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using VinylWebShop.Context;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace VinylWebShop.Facades
+namespace VinylWebShop.Repository
 {
-    public class AlbumFacade : IAlbumFacade
+
+    public class AlbumRepository : IAlbumRepository
     {
-        private readonly ILogger<AlbumFacade> _logger;
         private readonly VinylShopDbContext _dbContext;
-        public AlbumFacade(VinylShopDbContext dbContext, ILogger<AlbumFacade> logger)
+
+        public AlbumRepository(VinylShopDbContext dbContext)
         {
-            _dbContext = dbContext;
-            _logger = logger;
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
+
         public async Task<List<Album>> GetAlbums()
         {
             var albums = await _dbContext.Albums.ToListAsync();
-            if (!albums.Any())
-            {
-                _logger.LogWarning("The list of albums is empty.");
-            }
             return albums;
         }
 
         public async Task<Album> GetAlbumById(int id)
         {
             var album = await _dbContext.Albums.FindAsync(id);
-
-            if (album == null)
-            {
-                throw new ArgumentException("Album not found", nameof(id));
-            }
-
-            return album;
+            return album ?? throw new ArgumentException("Album not found", nameof(id));
         }
 
         public async Task<Album> AddAlbum(Album album)
         {
-
             if (album == null)
             {
                 throw new ArgumentNullException(nameof(album));
             }
+
             _dbContext.Albums.Add(album);
             await _dbContext.SaveChangesAsync();
             return album;
@@ -50,7 +41,6 @@ namespace VinylWebShop.Facades
         public async Task<bool> DeleteAlbum(int id)
         {
             var albumToDelete = await _dbContext.Albums.FindAsync(id);
-
             if (albumToDelete == null)
             {
                 return false;
@@ -58,14 +48,12 @@ namespace VinylWebShop.Facades
 
             _dbContext.Albums.Remove(albumToDelete);
             await _dbContext.SaveChangesAsync();
-
             return true;
         }
 
         public async Task<bool> UpdateAlbum(int id, Album updatedAlbum)
         {
             var albumToUpdate = await _dbContext.Albums.FindAsync(id);
-
             if (albumToUpdate == null)
             {
                 return false;
@@ -77,10 +65,8 @@ namespace VinylWebShop.Facades
             albumToUpdate.Description = updatedAlbum.Description;
 
             await _dbContext.SaveChangesAsync();
-
             return true;
         }
     }
+
 }
-
-

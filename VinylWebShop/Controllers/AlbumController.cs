@@ -1,22 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VinylWebShop.Facades;
 using VinylWebShop.Context;
+using VinylWebShop.Services;
 
 namespace VinylWebShop.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AlbumController : ControllerBase
+    public class AlbumController(IAlbumService albumService, ILogger<AlbumController> logger) : ControllerBase
     {
-        private readonly IAlbumFacade _albumFacade;
-        private readonly ILogger<AlbumController> _logger;
-
-        public AlbumController(IAlbumFacade albumFacade, ILogger<AlbumController> logger)
-        {
-            _albumFacade = albumFacade;
-            _logger = logger;
-        }
+        private readonly IAlbumService _albumService = albumService;
+        private readonly ILogger<AlbumController> _logger = logger;
 
         [HttpGet]
         [AllowAnonymous]
@@ -25,7 +19,7 @@ namespace VinylWebShop.Controllers
         {
             try
             {
-                var albums = await _albumFacade.GetAlbums();
+                var albums = await _albumService.GetAlbums();
                 if (albums.Any())
                 {
                     return Ok(albums); 
@@ -48,7 +42,7 @@ namespace VinylWebShop.Controllers
         {
             try
             {
-                var album = await _albumFacade.GetAlbumById(id);
+                var album = await _albumService.GetAlbumById(id);
 
                 if (album == null)
                 {
@@ -70,7 +64,7 @@ namespace VinylWebShop.Controllers
                 return BadRequest("Invalid Data");
             }
 
-            var newAlbum = await _albumFacade.AddAlbum(album);
+            var newAlbum = await _albumService.AddAlbum(album);
             return CreatedAtAction(nameof(GetAlbums), new { id = newAlbum.Id }, newAlbum);
         }
 
@@ -79,7 +73,7 @@ namespace VinylWebShop.Controllers
         {
             try
             {
-                var result = await _albumFacade.DeleteAlbum(id);
+                var result = await _albumService.DeleteAlbum(id);
 
                 if (!result)
                 {
@@ -99,7 +93,7 @@ namespace VinylWebShop.Controllers
         {
             try
             {
-                var result = await _albumFacade.UpdateAlbum(id, updatedAlbum);
+                var result = await _albumService.UpdateAlbum(id, updatedAlbum);
 
                 if (!result)
                 {

@@ -1,9 +1,9 @@
 ﻿
 using VinylWebShop.Context;
-using VinylWebShop.Facades;
+using VinylWebShop.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using VinylWebShop.Repository;
+
 
 namespace VinylWebShop
 {
@@ -25,7 +25,11 @@ namespace VinylWebShop
             }
             );
 
-            services.AddScoped<IAlbumFacade, AlbumFacade>();
+            services.AddScoped<IAlbumService, AlbumService>();
+            services.AddScoped<IProfileService, ProfileService>();
+
+            services.AddScoped<IAlbumRepository, AlbumRepository>();
+            services.AddScoped<IProfileRepository, ProfileRepository>();
 
 
             services.AddSwaggerGen(c =>

@@ -12,6 +12,7 @@ namespace VinylWebShop.Context
         }
 
         public DbSet<Album> Albums { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
