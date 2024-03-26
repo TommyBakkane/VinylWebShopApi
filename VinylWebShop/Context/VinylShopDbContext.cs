@@ -18,7 +18,7 @@ namespace VinylWebShop.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
+                optionsBuilder.UseSqlServer( _configuration.GetConnectionString("DefaultConnection"));
             }
         }
     }

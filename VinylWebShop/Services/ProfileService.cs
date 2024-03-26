@@ -3,13 +3,25 @@ using VinylWebShop.Repository;
 
 namespace VinylWebShop.Services
 {
-    public class ProfileService(IProfileRepository profileRepository) : IProfileService
+    public class ProfileService : IProfileService
     {
-        private readonly IProfileRepository _profileRepository = profileRepository ?? throw new ArgumentNullException(nameof(profileRepository));
+        private readonly IConfiguration _configuration;
+        private readonly IProfileRepository _profileRepository;
+
+        public ProfileService(IConfiguration configuration, IProfileRepository profileRepository)
+        {
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _profileRepository = profileRepository ?? throw new ArgumentNullException(nameof(profileRepository));
+        }
 
         public async Task<Profile> GetProfileById(int id)
         {
             return await _profileRepository.GetProfileById(id);
+        }
+
+        public async Task<Profile> GetProfileByUsername(string username)
+        {
+            return await _profileRepository.GetProfileByUsername(username);
         }
 
         public async Task<bool> UpdateProfile(int id, Profile updatedProfile)
@@ -22,9 +34,14 @@ namespace VinylWebShop.Services
             return await _profileRepository.DeleteProfile(id);
         }
 
-        public Task<Profile> AddProfile(Profile profile)
+        public async Task<Profile> AddProfile(Profile profile)
         {
-            throw new NotImplementedException();
+            if (profile == null)
+            {
+                throw new ArgumentNullException(nameof(profile));
+            }
+
+            return await _profileRepository.AddProfile(profile);
         }
     }
 }

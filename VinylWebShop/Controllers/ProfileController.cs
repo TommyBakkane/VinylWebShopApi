@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VinylWebShop.Context;
 using VinylWebShop.Services;
 
@@ -6,10 +7,16 @@ namespace VinylWebShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProfileController(IProfileService profileService, ILogger<ProfileController> logger) : ControllerBase
+    public class ProfileController : ControllerBase
     {
-        private readonly IProfileService _profileService = profileService ?? throw new ArgumentNullException(nameof(profileService));
-        private readonly ILogger<ProfileController> _logger = logger;
+        private readonly IProfileService _profileService;
+        private readonly ILogger<ProfileController> _logger;
+
+        public ProfileController(IProfileService profileService, ILogger<ProfileController> logger)
+        {
+            _profileService = profileService ?? throw new ArgumentNullException(nameof(profileService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProfile(int id)
@@ -22,11 +29,30 @@ namespace VinylWebShop.Controllers
             return Ok(profile);
         }
 
+        [HttpGet("Username/{username}")]
+        public async Task<IActionResult> GetProfileByUsername(string username)
+        {
+            var profile = await _profileService.GetProfileByUsername(username);
+
+            if (profile == null)
+            {
+                return NotFound();
+            }
+            return Ok(profile);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddProfile(Profile profile)
         {
-            var addedProfile = await _profileService.AddProfile(profile);
-            return CreatedAtAction(nameof(GetProfile), new { id = addedProfile.Id }, addedProfile);
+            try
+            {
+                var addedProfile = await _profileService.AddProfile(profile);
+                return Ok(addedProfile);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); 
+            }
         }
 
         [HttpDelete("{id}")]

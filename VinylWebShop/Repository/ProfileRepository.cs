@@ -1,4 +1,5 @@
-﻿using VinylWebShop.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using VinylWebShop.Context;
 
 namespace VinylWebShop.Repository
 {
@@ -13,9 +14,23 @@ namespace VinylWebShop.Repository
             return profile ?? throw new ArgumentException("Profile not found", nameof(id));
         }
 
+        public async Task<Profile> GetProfileByUsername(string username)
+        {
+            var profile = await _dbContext.Profiles.FirstOrDefaultAsync(p => p.Username == username);
+            return profile ?? throw new ArgumentException("Profile not found", nameof(username));
+        }
+
         public async Task<Profile> AddProfile(Profile profile)
         {
             ArgumentNullException.ThrowIfNull(profile);
+
+            var existingProfile = await _dbContext.Profiles
+                .FirstOrDefaultAsync(p => p.Username == profile.Username || p.Email == profile.Email);
+
+            if (existingProfile != null)
+            {
+                throw new InvalidOperationException("Username or email is already in use.");
+            }
 
             _dbContext.Profiles.Add(profile);
             await _dbContext.SaveChangesAsync();
